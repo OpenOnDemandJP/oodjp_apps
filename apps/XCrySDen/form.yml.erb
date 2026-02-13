@@ -1,0 +1,63 @@
+---
+cluster: rccs-cloud
+
+form:
+  - queue
+  - hours
+  - gpus
+  - file_format
+  - input
+
+attributes:
+  queue:
+    widget: "select"
+    label: "Partition"
+    options:
+      - ["qc-gh200"]
+      - ["r340"]
+      - ["a100"]
+  hours:
+    widget: "number_field"
+    label: "Elapsed time (1 - 24 hours)"
+    required: true
+    value: 1
+    min: 1
+    max: 24
+  gpus:
+    widget: "select"
+    label: "Number of GPUs (0 - 2)"
+    options:
+      - ["0"]
+      - ["1"]
+      - ["2"]
+  file_format:
+    widget: "select"
+    label: "Input file format"
+    options:
+      - ["(No input)",                   "none", data-hide-input: true, data-set-input: ""]
+      - ["xsf",                          "--xsf"]
+      - ["animxsf/axsf",                 "--animxsf"]
+      - ["bxsf",                         "--bxsf"]
+      - ["xmol/xyz",                     "--xmol"]
+      - ["pdb",                          "--pdb"]
+      - ["gzmat",                        "--gzmat"]
+      - ["gaussian_out/gxx_out/g98_out", "--gaussian_out"]
+      - ["cube/gXX_cube/g98_cube",       "--cube"]
+      - ["orca_out",                     "--orca_out"]
+      - ["crystal_inp",                  "--crystal_inp"]
+      - ["crystal_f9",                   "--crystal_f9"]
+      - ["wien_struct",                  "--wien_struct"]
+      - ["wien_kpath",                   "--wien_kpath"]
+      - ["wien_renderdensity",           "--wien_renderdensity"]
+      - ["wien_density",                 "--wien_density"]
+      - ["wien_fermisurface",            "--wien_fermisurface"]
+      - ["fhi_inpini",                   "--fhi_inpini"]
+      - ["fhi_coord",                    "--fhi_coord"]
+      - ["pwi/pw_inp",                   "--pwi"]
+      - ["pwo/pw_out",                   "--pwo"]
+      - ["s/script",                     "-s"]
+      - ["os/oldscript",                 "--os"]
+  input:
+    widget: "path_selector"
+    label: "Input file"
+    show_files: true

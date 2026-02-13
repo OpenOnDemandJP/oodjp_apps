@@ -1,0 +1,132 @@
+Bootstrap: docker
+From: rockylinux/rockylinux:9.7
+
+%post
+  ROCKEY_VERSION=9.7
+  INSTALL_CMD="dnf -y install --releasever=${ROCKEY_VERSION}"
+  GROUPINSTALL_CMD="dnf -y groupinstall --releasever=${ROCKEY_VERSION}"
+  #============================================================
+  # Base system and development environment
+  #============================================================
+  ${INSTALL_CMD} epel-release
+  dnf config-manager --set-enabled crb
+  ${GROUPINSTALL_CMD} 'Base' 'Development Tools' 'Infiniband Support' 'base-x' 'Xfce' 'Internet Browser'
+  ${INSTALL_CMD} emacs gedit gedit-plugins tcsh zsh fish rust boost-devel cmake Lmod rclone hwloc-libs numactl \
+  ghostscript ImageMagick ncview evince environment-modules
+
+  # Screen saver disabled for remote desktop usage
+  dnf -y remove xfce4-screensaver
+
+  # Open OnDemand runtime dependencies
+  ${INSTALL_CMD} turbojpeg
+  ${INSTALL_CMD} https://yum.osc.edu/ondemand/latest/compute/el9Server/aarch64/turbovnc-3.2.1-1.el9.aarch64.rpm
+  ${INSTALL_CMD} https://yum.osc.edu/ondemand/latest/compute/el9Server/aarch64/python3-websockify-0.11.0-2.el9.noarch.rpm
+
+  # VirtualGL
+  dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel9/sbsa/cuda-rhel9.repo
+  ${INSTALL_CMD} nvidia-driver-libs mesa-libGLU
+  cd /opt
+  wget https://sourceforge.net/projects/virtualgl/files/3.1/VirtualGL-3.1.aarch64.rpm/download
+  mv download VirtualGL-3.1.aarch64.rpm
+  rpm -ivh VirtualGL-3.1.aarch64.rpm
+  rm -f VirtualGL-3.1.aarch64.rpm
+  
+  #============================================================
+  # Visualization software
+  #============================================================
+  # Gnuplot
+  ${INSTALL_CMD} gnuplot
+  
+  # ParaView
+  ${INSTALL_CMD} paraview
+
+  # XCrySDen
+  cd /opt
+  ${INSTALL_CMD} libXmu-devel tcl-devel tk-devel libGL-devel mesa-libGLU-devel fftw-devel
+  wget https://sourceforge.net/projects/togl/files/Togl/2.0/Togl2.0-src.tar.gz
+  tar xfz Togl2.0-src.tar.gz
+  rm -f Togl2.0-src.tar.gz
+  cd Togl2.0
+  ./configure --prefix=/opt/togl2.0 --libdir=/usr/lib64
+  make -j
+  make install
+  cd /opt
+  wget http://www.xcrysden.org/download/xcrysden-1.6.3-rc2.tar.gz
+  tar xfz xcrysden-1.6.3-rc2.tar.gz
+  rm -f xcrysden-1.6.3-rc2.tar.gz
+  mv xcrysden-1.6.3-rc2 tmp-1.6.3
+  cd tmp-1.6.3
+  cp system/Make.sys-shared Make.sys
+  ${INSTALL_CMD} gcc-gfortran
+  make all GL_INCDIR=-I/opt/Togl2.0 TOGL_LIB=/usr/lib64/Togl2.0/libTogl2.0.so
+  prefix=/opt/xcrysden-1.6.3 make install
+  cd /opt
+  ln -s /opt/xcrysden-1.6.3 /opt/xcrysden
+  sed -i 's/set toglOpt(accum)          true/set toglOpt(accum)          false/' /opt/xcrysden/share/xcrysden-1.6.3-rc2/Tcl/toglOpt.tcl
+  rm -rf tmp-1.6.3 Togl2.0
+
+  # PyMOL
+  ${INSTALL_CMD} python3-devel python3-pip python3-tkinter glew-devel netcdf-devel glm-devel libxml2-devel freeglut-devel
+  pip install pmw
+  cd /opt
+  wget https://github.com/schrodinger/pymol-open-source/archive/refs/tags/v2.5.0.tar.gz
+  tar xfz v2.5.0.tar.gz
+  cd pymol-open-source-2.5.0
+  python3 setup.py build install --prefix=/opt/pymol-2.5.0 --glut --jobs=1
+  cd ..
+  ln -s /opt/pymol-2.5.0 pymol
+  rm -rf v2.5.0.tar.gz pymol-open-source-2.5.0
+
+  # GrADS
+  ${INSTALL_CMD} libgeotiff-devel gd-devel cairo-devel libXmu-devel udunits2-devel
+  cd /opt
+  wget https://github.com/j-m-adams/GrADS/archive/refs/tags/v2.2.3.tar.gz
+  tar xfz v2.2.3.tar.gz
+  cd GrADS-2.2.3
+  mkdir lib
+  LIBS="-ludunits2" CPPFLAGS="-I /usr/include/udunits2 -DH5_USE_110_API" ./configure --prefix=/opt/grads-2.2.3
+  make -j
+  make install
+  cp -a data /opt/grads-2.2.3/
+  echo "gxdisplay    Cairo    /opt/grads/lib/libgxdCairo.so" >  /opt/grads-2.2.3/udpt
+  echo "gxprint      Cairo    /opt/grads/lib/libgxpCairo.so" >> /opt/grads-2.2.3/udpt
+  cd ..
+  ln -s /opt/grads-2.2.3 /opt/grads
+  rm -rf v2.2.3.tar.gz GrADS-2.2.3
+
+  #============================================================
+  # Interactive application (Optional)
+  #============================================================
+  # VSCode (code-server)
+  ${INSTALL_CMD} https://github.com/coder/code-server/releases/download/v4.108.2/code-server-4.108.2-arm64.rpm
+
+  # JupyterLab
+  ${INSTALL_CMD} python3-pip
+  pip install jupyterlab
+
+  # RStudio Server (https://dailies.rstudio.com/rstudio/). Note that the arm64 version is experimental.
+  #${INSTALL_CMD} R initscripts
+  #${INSTALL_CMD} https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/arm64/rstudio-server-rhel-2026.04.0-daily-236-aarch64.rpm
+
+  # ttyd
+  ${INSTALL_CMD} ttyd tmux
+  
+  #============================================================
+  # Finalization and cleanup
+  #============================================================
+  dnf clean all
+
+%environment
+  # VirtualGL
+  export PATH=/opt/VirtualGL/bin:$PATH
+
+  # XCrySDen
+  export PATH=/opt/xcrysden/bin:$PATH
+
+  # PyMOL
+  export PATH=/opt/pymol/bin:$PATH
+
+  # GrADS
+  export PATH=/opt/grads/bin:$PATH
+  export GAUDPT=/opt/grads/udpt
+  export GADDIR=/opt/grads/data

@@ -1,0 +1,214 @@
+Bootstrap: docker
+From: rockylinux/rockylinux:9.7
+
+%post
+  ROCKEY_VERSION=9.7
+  INSTALL_CMD="dnf -y install --releasever=${ROCKEY_VERSION}"
+  GROUPINSTALL_CMD="dnf -y groupinstall --releasever=${ROCKEY_VERSION}"
+  #============================================================
+  # Base system and development environment
+  #============================================================
+  ${INSTALL_CMD} epel-release
+  dnf config-manager --set-enabled crb
+  ${GROUPINSTALL_CMD} 'Base' 'Development Tools' 'Infiniband Support' 'base-x' 'Xfce' 'Internet Browser'
+  ${INSTALL_CMD} emacs gedit gedit-plugins tcsh zsh fish rust boost-devel cmake Lmod rclone hwloc-libs numactl \
+  ghostscript ImageMagick ncview evince environment-modules
+
+  # Screen saver disabled for remote desktop usage
+  dnf -y remove xfce4-screensaver
+
+  # Open OnDemand runtime dependencies
+  ${INSTALL_CMD} turbojpeg
+  ${INSTALL_CMD} https://yum.osc.edu/ondemand/latest/compute/el9Server/x86_64/turbovnc-3.2.1-1.el9.x86_64.rpm
+  ${INSTALL_CMD} https://yum.osc.edu/ondemand/latest/compute/el9Server/x86_64/python3-websockify-0.11.0-2.el9.noarch.rpm
+
+  # VirtualGL
+  dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+  ${INSTALL_CMD} nvidia-driver-libs mesa-libGLU
+  cd /opt
+  wget https://sourceforge.net/projects/virtualgl/files/3.1/VirtualGL-3.1.x86_64.rpm/download
+  mv download VirtualGL-3.1.x86_64.rpm
+  rpm -ivh VirtualGL-3.1.x86_64.rpm
+  rm -f VirtualGL-3.1.x86_64.rpm
+  
+  #============================================================
+  # Visualization software
+  #============================================================
+  # Gnuplot
+  ${INSTALL_CMD} gnuplot
+  
+  # ParaView
+  cd /opt
+  wget -O ParaView-6.0.1-MPI-Linux-Python3.12-x86_64.tar.gz --trust-server-names "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v6.0&type=binary&os=Linux&downloadFile=ParaView-6.0.1-MPI-Linux-Python3.12-x86_64.tar.gz"
+  tar xfz ParaView-6.0.1-MPI-Linux-Python3.12-x86_64.tar.gz
+  rm -f ParaView-6.0.1-MPI-Linux-Python3.12-x86_64.tar.gz
+  ln -s ParaView-6.0.1-MPI-Linux-Python3.12-x86_64 ParaView
+
+  # XCrySDen
+  cd /opt
+  ${INSTALL_CMD} libXmu-devel tcl-devel tk-devel libGL-devel mesa-libGLU-devel fftw-devel
+  wget https://sourceforge.net/projects/togl/files/Togl/2.0/Togl2.0-src.tar.gz
+  tar xfz Togl2.0-src.tar.gz
+  rm -f Togl2.0-src.tar.gz
+  cd Togl2.0
+  ./configure --prefix=/opt/togl2.0 --libdir=/usr/lib64
+  make -j
+  make install
+  cd /opt
+  wget http://www.xcrysden.org/download/xcrysden-1.6.3-rc2.tar.gz
+  tar xfz xcrysden-1.6.3-rc2.tar.gz
+  rm -f xcrysden-1.6.3-rc2.tar.gz
+  mv xcrysden-1.6.3-rc2 tmp-1.6.3
+  cd tmp-1.6.3
+  cp system/Make.sys-shared Make.sys
+  ${INSTALL_CMD} gcc-gfortran
+  make all GL_INCDIR=-I/opt/Togl2.0 TOGL_LIB=/usr/lib64/Togl2.0/libTogl2.0.so
+  prefix=/opt/xcrysden-1.6.3 make install
+  cd /opt
+  ln -s /opt/xcrysden-1.6.3 /opt/xcrysden
+  sed -i 's/set toglOpt(accum)          true/set toglOpt(accum)          false/' /opt/xcrysden/share/xcrysden-1.6.3-rc2/Tcl/toglOpt.tcl
+  rm -rf tmp-1.6.3 Togl2.0
+
+  # PyMOL
+  ${INSTALL_CMD} python3-devel python3-pip python3-tkinter glew-devel netcdf-devel glm-devel libxml2-devel freeglut-devel
+  pip install pmw
+  cd /opt
+  wget https://github.com/schrodinger/pymol-open-source/archive/refs/tags/v2.5.0.tar.gz
+  tar xfz v2.5.0.tar.gz
+  cd pymol-open-source-2.5.0
+  python3 setup.py build install --prefix=/opt/pymol-2.5.0 --glut --jobs=1
+  cd ..
+  ln -s /opt/pymol-2.5.0 pymol
+  rm -rf v2.5.0.tar.gz pymol-open-source-2.5.0
+
+  # GrADS
+  ${INSTALL_CMD} libgeotiff-devel gd-devel cairo-devel libXmu-devel udunits2-devel
+  cd /opt
+  wget https://github.com/j-m-adams/GrADS/archive/refs/tags/v2.2.3.tar.gz
+  tar xfz v2.2.3.tar.gz
+  cd GrADS-2.2.3
+  mkdir lib
+  LIBS="-ludunits2" CPPFLAGS="-I /usr/include/udunits2 -DH5_USE_110_API" ./configure --prefix=/opt/grads-2.2.3
+  make -j
+  make install
+  cp -a data /opt/grads-2.2.3/
+  echo "gxdisplay    Cairo    /opt/grads/lib/libgxdCairo.so" >  /opt/grads-2.2.3/udpt
+  echo "gxprint      Cairo    /opt/grads/lib/libgxpCairo.so" >> /opt/grads-2.2.3/udpt
+  cd ..
+  ln -s /opt/grads-2.2.3 /opt/grads
+  rm -rf v2.2.3.tar.gz GrADS-2.2.3
+
+  # VisIt (https://visit-dav.github.io/visit-website/releases-as-tables/)
+  cd /opt
+  wget https://github.com/visit-dav/visit/releases/download/v3.4.2/visit3_4_2.linux-x86_64-rocky9.tar.gz
+  tar xfz visit3_4_2.linux-x86_64-rocky9.tar.gz
+  rm -f visit3_4_2.linux-x86_64-rocky9.tar.gz
+  ln -s visit3_4_2.linux-x86_64 visit
+  
+  # VESTA
+  ${INSTALL_CMD} http://jp-minerals.org/vesta/archives/3.5.8/vesta-3.5.8-1.x86_64.rpm
+  mv /usr/local/vesta-3.5.8 /opt/vesta-3.5.8
+  ln -s /opt/vesta-3.5.8 /opt/vesta
+  
+  # SmokeView
+  ${INSTALL_CMD} libXi-devel
+  cd /opt
+  wget https://github.com/firemodels/smv/archive/refs/tags/SMV-6.10.6.tar.gz
+  tar xfz SMV-6.10.6.tar.gz
+  cd smv-SMV-6.10.6/Build/smokeview/gnu_linux
+  bash make_smokeview.sh
+  mkdir /opt/smokeview-6.10.6
+  mv smokeview_linux /opt/smokeview-6.10.6
+  ln -s /opt/smokeview-6.10.6/smokeview_linux /opt/smokeview-6.10.6/smokeview
+  ln -s /opt/smokeview-6.10.6 /opt/smokeview
+  cd /opt
+  rm -rf SMV-6.10.6.tar.gz smv-SMV-6.10.6
+  
+  # OVITO
+  ${INSTALL_CMD} xcb-util-cursor
+  cd /opt
+  ${INSTALL_CMD} xcb-util-cursor
+  wget https://www.ovito.org/download/master/ovito-basic-3.14.1-x86_64.tar.xz
+  tar Jxf ovito-basic-3.14.1-x86_64.tar.xz
+  rm -f ovito-basic-3.14.1-x86_64.tar.xz
+  OVIT_DIRNAME=`ls -1 | grep ^ovito-basic`
+  ln -s ${OVIT_DIRNAME} ovito
+  
+  # ImageJ
+  cd /opt
+  wget https://wsr.imagej.net/distros/linux/ij154-linux64-java8.zip
+  unzip ij154-linux64-java8.zip
+  rm -f ij154-linux64-java8.zip
+
+  # MOLDEN
+  #${INSTALL_CMD} imake
+  #cd /opt
+  #wget https://ftp.science.ru.nl/Molden/molden7.3.tar.gz
+  #tar xfz molden7.3.tar.gz
+  #rm -f molden7.3.tar.gz
+  #chown root:root -R molden7.3
+  #cd molden7.3
+  #make FFLAGS="-fallow-argument-mismatch -g" AFLAG=""
+  #cd ..
+  #chmod 755 molden7.3
+  #chmod 755 -R molden7.3/bin
+  #ln -s /opt/molden7.3 /opt/molden
+
+  #============================================================
+  # Interactive application (Optional)
+  #============================================================
+  # VSCode (code-server)
+  ${INSTALL_CMD} https://github.com/coder/code-server/releases/download/v4.108.2/code-server-4.108.2-amd64.rpm
+
+  # JupyterLab
+  ${INSTALL_CMD} python3-pip
+  pip install jupyterlab
+
+  # RStudio Server (https://posit.co/download/rstudio-server/)
+  #${INSTALL_CMD} R initscripts
+  #${INSTALL_CMD} https://download2.rstudio.org/server/rhel9/x86_64/rstudio-server-rhel-2026.01.0-392-x86_64.rpm
+
+  # ttyd
+  ${INSTALL_CMD} ttyd tmux
+  
+  #============================================================
+  # Finalization and cleanup
+  #============================================================
+  dnf clean all
+
+%environment
+  # VirtualGL
+  export PATH=/opt/VirtualGL/bin:$PATH
+
+  # ParaView
+  export PATH=/opt/ParaView/bin:$PATH
+
+  # XCrySDen
+  export PATH=/opt/xcrysden/bin:$PATH
+
+  # PyMOL
+  export PATH=/opt/pymol/bin:$PATH
+
+  # GrADS
+  export PATH=/opt/grads/bin:$PATH
+  export GAUDPT=/opt/grads/udpt
+  export GADDIR=/opt/grads/data
+    
+  # VisIt
+  export PATH=/opt/visit/bin:$PATH
+  
+  # VESTA
+  export PATH=/opt/vesta:$PATH
+
+  # SmokeView
+  export PATH=/opt/smokeview:$PATH
+
+  # OVITO
+  export PATH=/opt/ovito/bin:$PATH
+
+  # ImageJ
+  export PATH=/opt/ImageJ:$PATH
+
+  # MOLDEN
+  #export PATH=/opt/molden/bin:$PATH
+

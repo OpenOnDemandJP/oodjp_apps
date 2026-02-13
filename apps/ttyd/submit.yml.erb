@@ -1,0 +1,9 @@
+---
+batch_connect:
+  template: "basic"
+
+script:
+  job_name: "ood_ttyd"
+  queue_name: <%= queue %>
+  native:
+    - -t <%= hours %>:00:00

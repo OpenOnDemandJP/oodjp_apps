@@ -1,0 +1,23 @@
+---
+cluster: rccs-cloud
+
+form:
+  - queue
+  - hours
+
+attributes:
+  queue:
+    widget: "select"
+    label: "Partition"
+    options:
+      - ["qc-gh200"]
+      - ["r340"]
+      - ["a100"]
+  hours:
+    widget: "number_field"
+    label: "Elapsed time (1 - 24 hours)"
+    required: true
+    value: 1
+    min: 1
+    max: 24
+

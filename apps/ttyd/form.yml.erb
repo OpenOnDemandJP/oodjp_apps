@@ -1,0 +1,39 @@
+---
+cluster: rccs-cloud
+
+form:
+  - queue
+  - hours
+  - gpus
+  - font_size
+
+attributes:
+  queue:
+    widget: "select"
+    label: "Partition"
+    options:
+      - ["qc-gh200"]
+      - ["r340"]
+      - ["a100"]
+  hours:
+    widget: "number_field"
+    label: "Elapsed time (1 - 24 hours)"
+    required: true
+    value: 1
+    min: 1
+    max: 24
+  gpus:
+    widget: "select"
+    label: "Number of GPUs (0 - 2)"
+    options:
+      - ["0"]
+      - ["1"]
+      - ["2"]
+  font_size:
+    id: font_size
+    label: Font Size
+    widget: number_field
+    max: 30
+    min: 10
+    step: 1
+    value: 16
