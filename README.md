@@ -9,7 +9,7 @@ The applications currently provided are listed below.
 ## Visualization Applications
 | Name | x86_64 | aarch64 | Description |
 | --- | --- | --- | --- |
-| [gnuplot](http://www.gnuplot.info/) | 5.4.3 | 5.4.3 | Command-line driven graphing program |
+| [Gnuplot](http://www.gnuplot.info/) | 5.4.3 | 5.4.3 | Command-line driven graphing program |
 | [ParaView](https://www.paraview.org/) | 6.0.1 | 5.11.1 | Scientific and technical data visualization program |
 | [XCrySDen](http://www.xcrysden.org/) | 1.6.3 | 1.6.3 | Visualization program for crystal and molecular structures |
 | [PyMOL](https://www.pymol.org/) | 2.5.0 | 2.5.0 | Visualization and analysis program for 3D structures of biomacromolecules |
@@ -82,7 +82,7 @@ For syntax details, refer to the Open OnDemand manuals linked below.
 - `Desktop/submit.yml.erb`: [Manual](https://osc.github.io/ood-documentation/latest/how-tos/app-development/interactive/submit.html)
 
 ## Verification
-Use the images in `sample_images/`.
+Use the data in `sample_images/`.
 For details, see [sample_images/README.md](./sample_images/README.md).
 
 # Note
