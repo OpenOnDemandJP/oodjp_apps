@@ -3,10 +3,10 @@
 
 # Start VESTA
 <% if context.respond_to?(:input) && !context.input.to_s.empty? %>
-/opt/vesta/VESTA "<%= context.input %>" &
+${_VIRTUALGL} /opt/vesta/VESTA "<%= context.input %>" &
 <% else %>
-/opt/vesta/VESTA &
+${_VIRTUALGL} /opt/vesta/VESTA &
 <% end %>
 
 # Start up xfce desktop (block until user logs out of desktop)
-${_VIRTUALGL} xfce4-session
+xfce4-session

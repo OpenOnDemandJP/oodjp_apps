@@ -10,10 +10,10 @@ fi
 
 # Start Paraview
 <% if context.respond_to?(:input) && !context.input.to_s.empty? %>
-"$PARAVIEW_PATH" "<%= context.input %>" &
+${_VIRTUALGL} "$PARAVIEW_PATH" "<%= context.input %>" &
 <% else %>
-"$PARAVIEW_PATH" &
+${_VIRTUALGL} "$PARAVIEW_PATH" &
 <% end %>
 
 # Start up xfce desktop (block until user logs out of desktop)
-${_VIRTUALGL} xfce4-session
+xfce4-session

@@ -3,10 +3,10 @@
 
 # Start XCrySDen
 <% if context.respond_to?(:file_format) && context.file_format.to_s != "none" && context.respond_to?(:input) && !context.input.to_s.empty? %>
-/opt/xcrysden/bin/xcrysden "<%= context.file_format %>" "<%= context.input %>" &
+${_VIRTUALGL} /opt/xcrysden/bin/xcrysden "<%= context.file_format %>" "<%= context.input %>" &
 <% else %>
-/opt/xcrysden/bin/xcrysden &
+${_VIRTUALGL} /opt/xcrysden/bin/xcrysden &
 <% end %>
 
 # Start up xfce desktop (block until user logs out of desktop)
-${_VIRTUALGL} xfce4-session
+xfce4-session

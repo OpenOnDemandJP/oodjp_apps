@@ -3,10 +3,10 @@
 
 # Start OVITO
 <% if context.respond_to?(:input) && !context.input.to_s.empty? %>
-/opt/ovito/bin/ovito "<%= context.input %>" &
+${_VIRTUALGL} /opt/ovito/bin/ovito "<%= context.input %>" &
 <% else %>
-/opt/ovito/bin/ovito &
+${_VIRTUALGL} /opt/ovito/bin/ovito &
 <% end %>
 
 # Start up xfce desktop (block until user logs out of desktop)
-${_VIRTUALGL} xfce4-session
+xfce4-session

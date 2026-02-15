@@ -3,10 +3,10 @@
 
 # Start PyMOL
 <% if context.respond_to?(:input) && !context.input.to_s.empty? %>
-/opt/pymol/bin/pymol "<%= context.input %>" &
+${_VIRTUALGL} /opt/pymol/bin/pymol "<%= context.input %>" &
 <% else %>
-/opt/pymol/bin/pymol &
+${_VIRTUALGL} /opt/pymol/bin/pymol &
 <% end %>
 
 # Start up xfce desktop (block until user logs out of desktop)
-${_VIRTUALGL} xfce4-session
+xfce4-session
