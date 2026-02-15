@@ -13,7 +13,7 @@ The applications currently provided are listed below.
 | [ParaView](https://www.paraview.org/) | 6.0.1 | 5.11.1 | Scientific and technical data visualization program |
 | [XCrySDen](http://www.xcrysden.org/) | 1.6.3 | 1.6.3 | Visualization program for crystal and molecular structures |
 | [PyMOL](https://www.pymol.org/) | 2.5.0 | 2.5.0 | Visualization and analysis program for 3D structures of biomacromolecules |
-| [GrADS](http://opengrads.org/) | 2.2.3 | 2.2.3 | Visualization and analysis program for gridded data in meteorology and climate fields |
+| [GrADS](http://opengrads.org/) | 2.2.3 | - | Visualization and analysis program for gridded data in meteorology and climate fields |
 | [VisIt](https://visit-dav.github.io/visit-website/) | 3.4.2 | - | Visualization and analysis program supporting various scientific data formats |
 | [VESTA](https://jp-minerals.org/vesta/jp/) | 3.5.8 | - | Visualization program for crystal structures and 3D data such as electron/nuclear densities |
 | [Smokeview](https://pages.nist.gov/fds-smv/) | 6.10.6 | - | Visualization program for displaying results from [FDS](https://pages.nist.gov/fds-smv/) and [CFAST](https://pages.nist.gov/cfast/index.html) |

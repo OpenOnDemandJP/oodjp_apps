@@ -77,22 +77,22 @@ From: rockylinux/rockylinux:9.7
   ln -s /opt/pymol-2.5.0 pymol
   rm -rf v2.5.0.tar.gz pymol-open-source-2.5.0
 
-  # GrADS
-  ${INSTALL_CMD} libgeotiff-devel gd-devel cairo-devel libXmu-devel udunits2-devel
-  cd /opt
-  wget https://github.com/j-m-adams/GrADS/archive/refs/tags/v2.2.3.tar.gz
-  tar xfz v2.2.3.tar.gz
-  cd GrADS-2.2.3
-  mkdir lib
-  LIBS="-ludunits2" CPPFLAGS="-I /usr/include/udunits2 -DH5_USE_110_API" ./configure --prefix=/opt/grads-2.2.3
-  make -j
-  make install
-  cp -a data /opt/grads-2.2.3/
-  echo "gxdisplay    Cairo    /opt/grads/lib/libgxdCairo.so" >  /opt/grads-2.2.3/udpt
-  echo "gxprint      Cairo    /opt/grads/lib/libgxpCairo.so" >> /opt/grads-2.2.3/udpt
-  cd ..
-  ln -s /opt/grads-2.2.3 /opt/grads
-  rm -rf v2.2.3.tar.gz GrADS-2.2.3
+  # GrADS ("undefined symbol: gxdbkq" message appears and it doesn't work)
+  #${INSTALL_CMD} libgeotiff-devel gd-devel cairo-devel libXmu-devel udunits2-devel
+  #cd /opt
+  #wget https://github.com/j-m-adams/GrADS/archive/refs/tags/v2.2.3.tar.gz
+  #tar xfz v2.2.3.tar.gz
+  #cd GrADS-2.2.3
+  #mkdir lib
+  #LIBS="-ludunits2" CPPFLAGS="-I /usr/include/udunits2 -DH5_USE_110_API" ./configure --prefix=/opt/grads-2.2.3
+  #make -j
+  #make install
+  #cp -a data /opt/grads-2.2.3/
+  #echo "gxdisplay    Cairo    /opt/grads/lib/libgxdCairo.so" >  /opt/grads-2.2.3/udpt
+  #echo "gxprint      Cairo    /opt/grads/lib/libgxpCairo.so" >> /opt/grads-2.2.3/udpt
+  #cd ..
+  #ln -s /opt/grads-2.2.3 /opt/grads
+  #rm -rf v2.2.3.tar.gz GrADS-2.2.3
 
   #============================================================
   # Interactive application (Optional)
@@ -127,6 +127,6 @@ From: rockylinux/rockylinux:9.7
   export PATH=/opt/pymol/bin:$PATH
 
   # GrADS
-  export PATH=/opt/grads/bin:$PATH
-  export GAUDPT=/opt/grads/udpt
-  export GADDIR=/opt/grads/data
+  #export PATH=/opt/grads/bin:$PATH
+  #export GAUDPT=/opt/grads/udpt
+  #export GADDIR=/opt/grads/data
