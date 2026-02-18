@@ -26,7 +26,6 @@ SingularityイメージのOSはRocky Linux 9.7、対応アーキテクチャはx
 | [Desktop (Xfce)](https://www.xfce.org/) | 4.18 | 4.18 | X Window System上で動作する軽量デスクトップ環境 |
 | [VSCode](https://code.visualstudio.com/) | 4.108.2 | 4.108.2 | [Microsoft](https://www.microsoft.com/)が開発しているコードエディタ |
 | [JupyterLab](https://jupyter.org/) | 4.5.3 | 4.5.3 | Webブラウザ上で動作するプログラムの対話型実行環境 |
-| [ttyd](https://github.com/tsl0922/ttyd) | 1.7.7 | 1.7.7 | ターミナルをWebブラウザ経由で操作できるコマンドラインツール |
 
 # 利用方法
 ## リポジトリのダウンロード
@@ -84,5 +83,3 @@ $ sudo ln -s oodjp_apps/apps/Desktop .
 # Note
 - Singularityコンテナとホストとでは、開発環境が異なることに注意してください。特に開発アプリケーションを使用する場合、Singularityコンテナとホストの開発環境を揃えた方が便利です。そのためには、適切なディレクトリのbind設定に加え、ホストの環境変数を引き継ぐ必要がありますが、それでも開発環境を完全に揃えることは難しいです。可能な場合は、開発アプリケーションをホストにインストールし、Singularityを使用せずにOpen OnDemandから利用することを推奨します。
 - aarch64版のSingularityコンテナでは、SBSA（Server Base System Architecture）の`nvidia-driver-libs`を利用しています。このコンテナをSBSAでないサーバで利用したい場合は、`nvidia-driver-libs`を利用しないコンテナを作成してください。
-- ttydはSafari Webブラウザでは動作しません（[参照](https://github.com/tsl0922/ttyd/issues/1437)）。
-- ttydにおいて、ターミナルマルチプレクサとしてtmuxを使っていますが、GNU Screenなども使うことも可能です。複数のターミナルマルチプレクサを選択できるようにすると便利かもしれません。

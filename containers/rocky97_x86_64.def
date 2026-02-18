@@ -169,7 +169,7 @@ From: rockylinux/rockylinux:9.7
   #${INSTALL_CMD} https://download2.rstudio.org/server/rhel9/x86_64/rstudio-server-rhel-2026.01.0-392-x86_64.rpm
 
   # ttyd
-  ${INSTALL_CMD} ttyd tmux
+  #${INSTALL_CMD} ttyd tmux
   
   #============================================================
   # Finalization and cleanup
