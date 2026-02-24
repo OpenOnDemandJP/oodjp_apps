@@ -109,7 +109,7 @@ From: rockylinux/rockylinux:9.7
   #${INSTALL_CMD} https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/arm64/rstudio-server-rhel-2026.04.0-daily-236-aarch64.rpm
 
   # ttyd
-  #${INSTALL_CMD} ttyd tmux
+  ${INSTALL_CMD} ttyd tmux
   
   #============================================================
   # Finalization and cleanup

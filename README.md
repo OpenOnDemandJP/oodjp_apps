@@ -26,6 +26,7 @@ The applications currently provided are listed below.
 | [Desktop (Xfce)](https://www.xfce.org/) | 4.18 | 4.18 | Lightweight desktop environment running on the X Window System |
 | [VSCode](https://code.visualstudio.com/) | 4.108.2 | 4.108.2 | Code editor developed by [Microsoft](https://www.microsoft.com/) |
 | [JupyterLab](https://jupyter.org/) | 4.5.3 | 4.5.3 | Interactive execution environment for programs running in a web browser |
+| [ttyd](https://github.com/tsl0922/ttyd) | 1.7.7 | 1.7.7 | Command-line tool that enables terminal access through a web browser |
 
 # Usage
 ## Download the Repository
@@ -87,3 +88,5 @@ For details, see [sample_images/README.md](./sample_images/README.md).
 # Note
 - Keep in mind that the development environments inside the Singularity container and on the host are different. This is especially important when using development applications. It is more convenient if the development environments in the container and on the host are aligned. To do that, in addition to proper bind settings for directories, you need to pass host environment variables, but even then it is difficult to make them completely identical. When possible, we recommend installing development applications on the host and using them from Open OnDemand without Singularity.
 - The aarch64 Singularity container uses SBSA (Server Base System Architecture) `nvidia-driver-libs`. If you want to use this container on a non-SBSA server, create a container that does not use `nvidia-driver-libs`.
+- If you run ttyd with Open OnDemand 4.1 or later, you must set `strip_proxy_headers:` in Open OnDemand ([reference](https://discourse.openondemand.org/t/the-ttyd-not-working-in-ood-4-1-1/4757/12)). Moreover, ttyd does not work on the Safari web browser ([reference](https://github.com/tsl0922/ttyd/issues/1437)).
+
