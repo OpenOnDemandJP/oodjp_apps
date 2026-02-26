@@ -13,7 +13,7 @@ PORT="$port"
 export port PORT
 
 # Generate SHA1 encrypted password (requires OpenSSL installed)
-password="$(create_passwd 22)"
+password="$(create_passwd 24)"
 PASSWORD="$password"
 export password PASSWORD
 
