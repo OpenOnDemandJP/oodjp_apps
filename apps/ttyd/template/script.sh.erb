@@ -26,11 +26,10 @@ fi
 # launch ttyd
 singularity run --env PS1='\u@\h:\w\$ ' ${_OPTION} ${CONTAINER_IMAGE} ttyd \
   -p "${PORT}" \
-  -b "/node/${HOST}/${PORT}" \
+  -b "/node/${HOST}/${PORT}/${PASSWORD}" \
   -t "fontSize=${OOD_FONT_SIZE}" \
   -t 'cursorStyle=bar' \
   -t 'cursorBlink=true' \
   -t 'theme={"background": "#282a36", "foreground": "#f8f8f2"}' \
-  -c "ttyd:${PASSWORD}" \
   -W -m 1 \
   "$OOD_STAGED_ROOT/tmux.sh"
