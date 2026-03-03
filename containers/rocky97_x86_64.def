@@ -168,8 +168,15 @@ From: rockylinux/rockylinux:9.7
   #${INSTALL_CMD} R initscripts
   #${INSTALL_CMD} https://download2.rstudio.org/server/rhel9/x86_64/rstudio-server-rhel-2026.01.0-392-x86_64.rpm
 
-  # ttyd
-  ${INSTALL_CMD} ttyd tmux
+  # tmux and ttyd
+  ${INSTALL_CMD} tmux libwebsockets-devel json-c-devel
+  cd /opt
+  git clone https://github.com/OpenOnDemandJP/ttyd ttyd-src
+  cd ttyd-src; mkdir build; cd build
+  cmake -DCMAKE_INSTALL_PREFIX=/opt/ttyd ..
+  make; make install
+  cd ../
+  rm -rf ttyd-src
   
   #============================================================
   # Finalization and cleanup
@@ -212,3 +219,6 @@ From: rockylinux/rockylinux:9.7
   # MOLDEN
   #export PATH=/opt/molden/bin:$PATH
 
+  # ttyd
+  export PATH=/opt/ttyd/bin:$PATH
+  
