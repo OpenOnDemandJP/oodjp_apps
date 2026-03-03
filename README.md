@@ -26,7 +26,7 @@ The applications currently provided are listed below.
 | [Desktop (Xfce)](https://www.xfce.org/) | 4.18 | 4.18 | Lightweight desktop environment running on the X Window System |
 | [VSCode](https://code.visualstudio.com/) | 4.108.2 | 4.108.2 | Code editor developed by [Microsoft](https://www.microsoft.com/) |
 | [JupyterLab](https://jupyter.org/) | 4.5.3 | 4.5.3 | Interactive execution environment for programs running in a web browser |
-| [ttyd](https://github.com/tsl0922/ttyd) | 1.7.7 | 1.7.7 | Command-line tool that enables terminal access through a web browser |
+| [ttyd](https://github.com/OpenOnDemandJP/ttyd) | 1.7.7 | 1.7.7 | Command-line tool that enables terminal access through a web browser |
 
 # Usage
 ## Download the Repository
