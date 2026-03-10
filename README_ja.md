@@ -85,3 +85,4 @@ $ sudo ln -s oodjp_apps/apps/Desktop .
 - Singularityコンテナとホストとでは、開発環境が異なることに注意してください。特に開発アプリケーションを使用する場合、Singularityコンテナとホストの開発環境を揃えた方が便利です。そのためには、適切なディレクトリのbind設定に加え、ホストの環境変数を引き継ぐ必要がありますが、それでも開発環境を完全に揃えることは難しいです。可能な場合は、開発アプリケーションをホストにインストールし、Singularityを使用せずにOpen OnDemandから利用することを推奨します。
 - aarch64版のSingularityコンテナでは、SBSA（Server Base System Architecture）の`nvidia-driver-libs`を利用しています。このコンテナをSBSAでないサーバで利用したい場合は、`nvidia-driver-libs`を利用しないコンテナを作成してください。
 - [本家のttyd](https://github.com/tsl0922/ttyd)はコマンドラインからワンタイムパスワードを設定するため、環境によってはpsコマンドでそのパスワードが見えてしまいます。そこで、環境変数経由でワンタイムパスワードを設定できる[forkしたttyd](https://github.com/OpenOnDemandJP/ttyd)を用いています。
+- ホストがUbuntu24.04かつNVIDIA GPUを搭載している場合、コンテナとのglibcのバージョンの違いにより可視化アプリケーションが動作しません。`oodjp_apps/utils/config.rb`の`_OPTION="--nv"`をコメントアウトすると動作します。
