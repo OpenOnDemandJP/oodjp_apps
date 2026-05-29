@@ -124,15 +124,15 @@ _OPTION=""
       fi
     }
 
-    if [ -e /usr/local/cuda ]; then
+    if [ -e /usr/local/cuda ] || [ -e /opt/nvidia ]; then
       _OPTION="--nv"
-      for dir in $(ls -d1 /usr/local/cuda*); do
+      for dir in $(ls -d1 /usr/local/cuda* 2>/dev/null); do
         append_bindpath "${dir}"
       done
       [ -e /opt/nvidia ] && append_bindpath "/opt/nvidia"
     elif [ -e /opt/rocm ]; then
       _OPTION="--rocm"
-      for dir in $(ls -d1 /opt/rocm*); do
+      for dir in $(ls -d1 /opt/rocm* 2>/dev/null); do
         append_bindpath "${dir}"
       done
       [ -e /opt/amdgpu ] && append_bindpath "/opt/amdgpu"
