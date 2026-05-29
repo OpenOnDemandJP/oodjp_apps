@@ -12,7 +12,7 @@ From: rockylinux/rockylinux:9.7
   dnf config-manager --set-enabled crb
   ${GROUPINSTALL_CMD} 'Base' 'Development Tools' 'Infiniband Support' 'base-x' 'Xfce' 'Internet Browser'
   ${INSTALL_CMD} emacs gedit gedit-plugins tcsh zsh fish rust boost-devel cmake Lmod rclone hwloc-libs numactl \
-  ghostscript ImageMagick ncview evince environment-modules
+  ghostscript ImageMagick ncview evince environment-modules fuse-sshfs
 
   # Screen saver disabled for remote desktop usage
   dnf -y remove xfce4-screensaver
