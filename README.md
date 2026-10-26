@@ -1,3 +1,7 @@
+> [!NOTE]
+> This repository is no longer maintained and has been archived.
+> The contents remain available for reference, but no further updates, issues, or pull requests will be accepted.
+
 # Introduction
 This repository collects interactive applications that run on compute nodes using Open OnDemand.
 All applications are executed using Singularity, a Linux container runtime.
